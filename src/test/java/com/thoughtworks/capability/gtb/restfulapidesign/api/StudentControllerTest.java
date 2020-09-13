@@ -29,6 +29,7 @@ class StudentControllerTest {
     private final String DELETE_ONE_STUDENT_URL = "/students/%s";
     private final String GET_ALL_STUDENT_URL = "/students";
     private final String GET_STUDENTS_BY_GENDER_URL = "/students?gender=%s";
+    private final String GET_STUDENT_BY_ID_URL = "/students/%s";
 
     @Autowired
     MockMvc mockMvc;
@@ -133,5 +134,37 @@ class StudentControllerTest {
                 .andExpect(jsonPath("$[0].name", is("李四")))
                 .andExpect(jsonPath("$[0].gender", is("Female")))
                 .andExpect(jsonPath("$[0].note", is("学习委员")));
+    }
+
+    @Test
+    public void shouldGetStudentById() throws Exception {
+        addOneSampleStudent(sampleStudentVoZhangSan);
+        assertEquals(1, StudentRepository.studentList.size());
+
+        addOneSampleStudent(sampleStudentVoLiSi);
+        assertEquals(2, StudentRepository.studentList.size());
+
+        mockMvc.perform(get(String.format(GET_STUDENT_BY_ID_URL, "1")).accept(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is("1")))
+                .andExpect(jsonPath("$.name", is("李四")))
+                .andExpect(jsonPath("$.gender", is("Female")))
+                .andExpect(jsonPath("$.note", is("学习委员")));
+    }
+
+    @Test
+    public void shouldReturnBadRequestWhenStudentIdInvalid() throws Exception {
+        addOneSampleStudent(sampleStudentVoZhangSan);
+        assertEquals(1, StudentRepository.studentList.size());
+
+        addOneSampleStudent(sampleStudentVoLiSi);
+        assertEquals(2, StudentRepository.studentList.size());
+
+        mockMvc.perform(get(String.format(GET_STUDENT_BY_ID_URL, "100")).accept(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code", is(404)))
+                .andExpect(jsonPath("$.message", is("student index invalid")));
     }
 }

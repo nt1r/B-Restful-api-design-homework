@@ -33,4 +33,12 @@ public class StudentRepository {
     public List<Student> findByGender(Gender gender) {
         return studentList.stream().filter(student -> student.getGender().equals(gender)).collect(Collectors.toList());
     }
+
+    public Student findById(String id) {
+        List<Student> targetStudentList = studentList.stream().filter(student -> student.getId().equals(id)).collect(Collectors.toList());
+        if (targetStudentList.isEmpty()) {
+            throw new IllegalArgumentException("student index invalid");
+        }
+        return targetStudentList.get(0);
+    }
 }

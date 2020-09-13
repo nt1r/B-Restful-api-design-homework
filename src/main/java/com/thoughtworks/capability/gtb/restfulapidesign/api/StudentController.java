@@ -19,6 +19,11 @@ public class StudentController {
         this.studentService = studentService;
     }
 
+    @GetMapping("/{id}")
+    public Student getOneStudent(@PathVariable String id) {
+        return studentService.getOneStudent(id);
+    }
+
     @GetMapping("")
     public List<Student> getStudentsList(@RequestParam(required = false) Gender gender) {
         return studentService.getStudentsList(gender);
