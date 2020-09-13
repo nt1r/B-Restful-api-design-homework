@@ -1,10 +1,12 @@
 package com.thoughtworks.capability.gtb.restfulapidesign.repository;
 
+import com.thoughtworks.capability.gtb.restfulapidesign.entity.Gender;
 import com.thoughtworks.capability.gtb.restfulapidesign.entity.Student;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class StudentRepository {
@@ -22,5 +24,13 @@ public class StudentRepository {
                 break;
             }
         }
+    }
+
+    public List<Student> findAll() {
+        return studentList;
+    }
+
+    public List<Student> findByGender(Gender gender) {
+        return studentList.stream().filter(student -> student.getGender().equals(gender)).collect(Collectors.toList());
     }
 }

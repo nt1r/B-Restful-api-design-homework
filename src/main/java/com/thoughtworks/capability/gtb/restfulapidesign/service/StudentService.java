@@ -1,10 +1,12 @@
 package com.thoughtworks.capability.gtb.restfulapidesign.service;
 
+import com.thoughtworks.capability.gtb.restfulapidesign.entity.Gender;
 import com.thoughtworks.capability.gtb.restfulapidesign.entity.Student;
 import com.thoughtworks.capability.gtb.restfulapidesign.repository.StudentRepository;
 import com.thoughtworks.capability.gtb.restfulapidesign.vo.StudentVo;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
@@ -28,5 +30,13 @@ public class StudentService {
 
     public void deleteOneStudent(String id) {
         studentRepository.deleteById(id);
+    }
+
+    public List<Student> getStudentsList(Gender gender) {
+        if (gender == null) {
+            return studentRepository.findAll();
+        } else {
+            return studentRepository.findByGender(gender);
+        }
     }
 }
