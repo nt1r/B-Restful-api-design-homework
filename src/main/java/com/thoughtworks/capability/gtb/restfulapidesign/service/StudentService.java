@@ -43,4 +43,9 @@ public class StudentService {
     public Student getOneStudent(String id) {
         return studentRepository.findById(id);
     }
+
+    public Student updateOneStudent(String id, StudentVo studentVo) {
+        Student student = Student.builder().id(id).name(studentVo.getName()).gender(studentVo.getGender()).note(studentVo.getNote()).build();
+        return studentRepository.update(id, student);
+    }
 }

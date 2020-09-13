@@ -2,6 +2,7 @@ package com.thoughtworks.capability.gtb.restfulapidesign.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thoughtworks.capability.gtb.restfulapidesign.entity.Gender;
+import com.thoughtworks.capability.gtb.restfulapidesign.entity.Student;
 import com.thoughtworks.capability.gtb.restfulapidesign.repository.StudentRepository;
 import com.thoughtworks.capability.gtb.restfulapidesign.service.StudentService;
 import com.thoughtworks.capability.gtb.restfulapidesign.vo.StudentVo;
@@ -30,6 +31,7 @@ class StudentControllerTest {
     private final String GET_ALL_STUDENT_URL = "/students";
     private final String GET_STUDENTS_BY_GENDER_URL = "/students?gender=%s";
     private final String GET_STUDENT_BY_ID_URL = "/students/%s";
+    private final String UPDATE_STUDENT_BY_ID_URL = "/students/%s";
 
     @Autowired
     MockMvc mockMvc;
@@ -166,5 +168,22 @@ class StudentControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.code", is(404)))
                 .andExpect(jsonPath("$.message", is("student index invalid")));
+    }
+
+    @Test
+    public void shouldUpdateStudentById() throws Exception {
+        addOneSampleStudent(sampleStudentVoZhangSan);
+        assertEquals(1, StudentRepository.studentList.size());
+
+        StudentVo studentVo = StudentVo.builder().name("改名后的张三").gender(Gender.Female).note("体育委员").build();
+        mockMvc.perform(put(String.format(UPDATE_STUDENT_BY_ID_URL, "0")).accept(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(studentVo)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is("0")))
+                .andExpect(jsonPath("$.name", is("改名后的张三")))
+                .andExpect(jsonPath("$.gender", is("Female")))
+                .andExpect(jsonPath("$.note", is("体育委员")));
     }
 }
