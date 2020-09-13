@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Service
 public class StudentService {
     private final StudentRepository studentRepository = new StudentRepository();
-    private final AtomicInteger autoIncreaseId = new AtomicInteger(0);
+    public static final AtomicInteger autoIncreaseId = new AtomicInteger(0);
 
     public Student addOneStudent(StudentVo studentVo) {
         Student student = convertStudentVo2Student(studentVo, autoIncreaseId.getAndAdd(1));
@@ -24,5 +24,9 @@ public class StudentService {
                 .gender(studentVo.getGender())
                 .note(studentVo.getNote())
                 .build();
+    }
+
+    public void deleteOneStudent(String id) {
+        studentRepository.deleteById(id);
     }
 }

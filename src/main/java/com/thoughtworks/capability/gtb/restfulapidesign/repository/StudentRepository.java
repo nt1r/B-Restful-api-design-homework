@@ -8,10 +8,19 @@ import java.util.List;
 
 @Repository
 public class StudentRepository {
-    List<Student> studentList = new ArrayList<>();
+    public static List<Student> studentList = new ArrayList<>();
 
     public Student save(Student student) {
         studentList.add(student);
         return student;
+    }
+
+    public void deleteById(String id) {
+        for (Student student : studentList) {
+            if (student.getId().equals(id)) {
+                studentList.remove(student);
+                break;
+            }
+        }
     }
 }
