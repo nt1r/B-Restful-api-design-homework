@@ -156,7 +156,7 @@ class StudentControllerTest {
     }
 
     @Test
-    public void shouldReturnBadRequestWhenStudentIdInvalid() throws Exception {
+    public void shouldReturnNotFoundWhenGetStudentIdInvalid() throws Exception {
         addOneSampleStudent(sampleStudentVoZhangSan);
         assertEquals(1, StudentRepository.studentList.size());
 
@@ -185,5 +185,20 @@ class StudentControllerTest {
                 .andExpect(jsonPath("$.name", is("改名后的张三")))
                 .andExpect(jsonPath("$.gender", is("Female")))
                 .andExpect(jsonPath("$.note", is("体育委员")));
+    }
+
+    @Test
+    public void shouldReturnNotFoundWhenUpdateStudentIdInvalid() throws Exception {
+        addOneSampleStudent(sampleStudentVoZhangSan);
+        assertEquals(1, StudentRepository.studentList.size());
+
+        StudentVo studentVo = StudentVo.builder().name("改名后的张三").gender(Gender.Female).note("体育委员").build();
+        mockMvc.perform(put(String.format(UPDATE_STUDENT_BY_ID_URL, "100")).accept(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(studentVo)))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code", is(404)))
+                .andExpect(jsonPath("$.message", is("student index invalid")));
     }
 }
