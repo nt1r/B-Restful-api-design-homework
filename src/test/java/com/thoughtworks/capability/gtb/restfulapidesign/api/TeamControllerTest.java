@@ -1,9 +1,11 @@
 package com.thoughtworks.capability.gtb.restfulapidesign.api;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thoughtworks.capability.gtb.restfulapidesign.entity.Gender;
 import com.thoughtworks.capability.gtb.restfulapidesign.entity.Student;
 import com.thoughtworks.capability.gtb.restfulapidesign.repository.StudentRepository;
 import com.thoughtworks.capability.gtb.restfulapidesign.repository.TeamRepository;
+import com.thoughtworks.capability.gtb.restfulapidesign.request_object.RenameTeamRequest;
 import com.thoughtworks.capability.gtb.restfulapidesign.service.StudentService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,6 +29,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @AutoConfigureMockMvc
 class TeamControllerTest {
     private final String ASSIGN_STUDENTS_URL = "/teams/assignment";
+    private final String RENAME_TEAM_URL = "/teams/name";
+
     private final String DEFAULT_NOTE = "default note";
     private final Student studentZhangSan = Student.builder().name("张三").gender(Gender.Male).note(DEFAULT_NOTE).build();
     private final Student studentLiSi = Student.builder().name("李四").gender(Gender.Female).note(DEFAULT_NOTE).build();
@@ -34,6 +38,8 @@ class TeamControllerTest {
 
     @Autowired
     MockMvc mockMvc;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
     void setUp() {
@@ -90,5 +96,15 @@ class TeamControllerTest {
                 .andExpect(jsonPath("$[3].students", hasSize(4)))
                 .andExpect(jsonPath("$[4].students", hasSize(4)))
                 .andExpect(jsonPath("$[5].students", hasSize(4)));
+    }
+
+    @Test
+    public void shouldRenameTeam() throws Exception {
+        mockMvc.perform(patch(RENAME_TEAM_URL).accept(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(RenameTeamRequest.builder().id("0").name("new name").build())))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", is("new name")));
     }
 }

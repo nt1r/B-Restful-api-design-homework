@@ -1,11 +1,9 @@
 package com.thoughtworks.capability.gtb.restfulapidesign.api;
 
+import com.thoughtworks.capability.gtb.restfulapidesign.request_object.RenameTeamRequest;
 import com.thoughtworks.capability.gtb.restfulapidesign.service.TeamService;
 import com.thoughtworks.capability.gtb.restfulapidesign.vo.TeamVo;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,5 +20,10 @@ public class TeamController {
     @GetMapping("/assignment")
     public List<TeamVo> shuffleStudents() {
         return teamService.shuffleStudents();
+    }
+
+    @PatchMapping("/name")
+    public TeamVo updateTeamName(@RequestBody RenameTeamRequest renameTeamRequest) {
+        return teamService.updateTeamName(renameTeamRequest);
     }
 }

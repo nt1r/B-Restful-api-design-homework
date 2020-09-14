@@ -1,6 +1,8 @@
 package com.thoughtworks.capability.gtb.restfulapidesign.repository;
 
 import com.thoughtworks.capability.gtb.restfulapidesign.entity.Team;
+import com.thoughtworks.capability.gtb.restfulapidesign.request_object.RenameTeamRequest;
+import com.thoughtworks.capability.gtb.restfulapidesign.vo.TeamVo;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -34,5 +36,11 @@ public class TeamRepository {
             int teamIndex = studentIndex % TEAM_COUNT;
             teamList.get(teamIndex).getStudents().add(StudentRepository.studentList.get(studentIndex));
         }
+    }
+
+    public Team updateName(RenameTeamRequest renameTeamRequest) {
+        Team targetTeam = teamList.get(Integer.parseInt(renameTeamRequest.getId()));
+        targetTeam.setName(renameTeamRequest.getName());
+        return targetTeam;
     }
 }
