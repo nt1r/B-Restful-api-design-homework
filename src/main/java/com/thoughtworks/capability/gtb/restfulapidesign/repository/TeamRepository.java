@@ -43,4 +43,8 @@ public class TeamRepository {
         targetTeam.setName(renameTeamRequest.getName());
         return targetTeam;
     }
+
+    public List<Team> findAll() {
+        return teamList;
+    }
 }

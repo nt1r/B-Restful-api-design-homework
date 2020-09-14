@@ -23,10 +23,7 @@ public class TeamService {
         List<TeamVo> teamVoList = new ArrayList<>();
         List<Team> teamList = teamRepository.shuffleStudents();
 
-        teamList.forEach(team -> {
-            List<StudentVo> studentVoList = convertStudentList2StudentVoList(team.getStudents());
-            teamVoList.add(TeamVo.builder().name(team.getName()).note(team.getNote()).students(studentVoList).build());
-        });
+        convertTeamList2TeamVoList(teamList, teamVoList);
         return teamVoList;
     }
 
@@ -40,5 +37,19 @@ public class TeamService {
         Team team = teamRepository.updateName(renameTeamRequest);
         List<StudentVo> studentVoList = convertStudentList2StudentVoList(team.getStudents());
         return TeamVo.builder().name(team.getName()).note(team.getNote()).students(studentVoList).build();
+    }
+
+    public List<TeamVo> getTeamList() {
+        List<TeamVo> teamVoList = new ArrayList<>();
+        List<Team> teamList = teamRepository.findAll();
+        convertTeamList2TeamVoList(teamList, teamVoList);
+        return teamVoList;
+    }
+
+    private void convertTeamList2TeamVoList(List<Team> teamList, List<TeamVo> teamVoList) {
+        teamList.forEach(team -> {
+            List<StudentVo> studentVoList = convertStudentList2StudentVoList(team.getStudents());
+            teamVoList.add(TeamVo.builder().name(team.getName()).note(team.getNote()).students(studentVoList).build());
+        });
     }
 }

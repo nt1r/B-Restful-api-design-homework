@@ -26,4 +26,9 @@ public class TeamController {
     public TeamVo updateTeamName(@RequestBody RenameTeamRequest renameTeamRequest) {
         return teamService.updateTeamName(renameTeamRequest);
     }
+
+    @GetMapping()
+    public List<TeamVo> getTeamList() {
+        return teamService.getTeamList();
+    }
 }

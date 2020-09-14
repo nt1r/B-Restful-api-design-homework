@@ -30,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class TeamControllerTest {
     private final String ASSIGN_STUDENTS_URL = "/teams/assignment";
     private final String RENAME_TEAM_URL = "/teams/name";
+    private final String GET_TEAM_LIST_URL = "/teams";
 
     private final String DEFAULT_NOTE = "default note";
     private final Student studentZhangSan = Student.builder().name("张三").gender(Gender.Male).note(DEFAULT_NOTE).build();
@@ -106,5 +107,23 @@ class TeamControllerTest {
                 .content(objectMapper.writeValueAsString(RenameTeamRequest.builder().id("0").name("new name").build())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is("new name")));
+    }
+
+    @Test
+    public void shouldGetTeamList() throws Exception {
+        mockMvc.perform(get(ASSIGN_STUDENTS_URL).accept(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8"))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get(GET_TEAM_LIST_URL).accept(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(6)))
+                .andExpect(jsonPath("$[0].students", hasSize(5)))
+                .andExpect(jsonPath("$[1].students", hasSize(5)))
+                .andExpect(jsonPath("$[2].students", hasSize(4)))
+                .andExpect(jsonPath("$[3].students", hasSize(4)))
+                .andExpect(jsonPath("$[4].students", hasSize(4)))
+                .andExpect(jsonPath("$[5].students", hasSize(4)));
     }
 }
