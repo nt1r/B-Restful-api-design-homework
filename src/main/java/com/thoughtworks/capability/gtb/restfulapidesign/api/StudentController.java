@@ -25,12 +25,12 @@ public class StudentController {
         return studentService.getOneStudent(id);
     }
 
-    @GetMapping("")
+    @GetMapping()
     public List<Student> getStudentsList(@RequestParam(required = false) Gender gender) {
         return studentService.getStudentsList(gender);
     }
 
-    @PostMapping("")
+    @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public Student addOneStudent(@RequestBody StudentVo studentVo) {
         return studentService.addOneStudent(studentVo);
