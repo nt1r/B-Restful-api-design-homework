@@ -66,7 +66,7 @@ class StudentControllerTest {
                 .characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(studentVo)))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     @Test

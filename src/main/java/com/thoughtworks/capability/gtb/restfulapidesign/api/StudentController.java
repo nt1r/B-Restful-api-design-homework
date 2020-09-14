@@ -4,6 +4,7 @@ import com.thoughtworks.capability.gtb.restfulapidesign.entity.Gender;
 import com.thoughtworks.capability.gtb.restfulapidesign.entity.Student;
 import com.thoughtworks.capability.gtb.restfulapidesign.service.StudentService;
 import com.thoughtworks.capability.gtb.restfulapidesign.vo.StudentVo;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +31,7 @@ public class StudentController {
     }
 
     @PostMapping("")
+    @ResponseStatus(HttpStatus.CREATED)
     public Student addOneStudent(@RequestBody StudentVo studentVo) {
         return studentService.addOneStudent(studentVo);
     }
